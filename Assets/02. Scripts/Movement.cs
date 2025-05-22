@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem.Controls;
 
 public class Movement : MonoBehaviour
 {
@@ -10,21 +11,15 @@ public class Movement : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKey(KeyCode.W))
-        {
-            transform.position += moveSpeed * Time.deltaTime * Vector3.forward;
-        }
-        else if (Input.GetKey(KeyCode.S))
-        {
-            transform.position += moveSpeed * Time.deltaTime * Vector3.back;
-        }
-        else if (Input.GetKey(KeyCode.A))
-        {
-            transform.position += moveSpeed * Time.deltaTime * Vector3.left;
-        }
-        else if (Input.GetKey(KeyCode.D))
-        {
-            transform.position += moveSpeed * Time.deltaTime * Vector3.right;
-        }
+        float h = Input.GetAxis("Horizontal");
+        float v = Input.GetAxis("Vertical");
+        
+        // float h = Input.GetAxisRaw("Horizontal");
+        // float v = Input.GetAxisRaw("Vertical");
+
+        Vector3 dir = new Vector3(h, 0, v);
+        Debug.Log($"현재 입력 : {dir}");
+
+        transform.position += moveSpeed * Time.deltaTime * dir;
     }
 }
