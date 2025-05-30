@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class DoorEvent : MonoBehaviour
@@ -12,6 +13,13 @@ public class DoorEvent : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        animator.SetTrigger("Open");
+        if (other.CompareTag("Player"))
+            animator.SetTrigger("Open");
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+            animator.SetTrigger("Close");
     }
 }
