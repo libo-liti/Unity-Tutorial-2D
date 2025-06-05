@@ -5,6 +5,8 @@ public class Obstacle : MonoBehaviour
     public float pipeSpeed;
     public float returnPosX = 11f;
     public float randomPosY;
+
+    public GameObject fadeUI;
     void Update()
     {
         transform.position += pipeSpeed * Time.fixedDeltaTime * Vector3.left;
@@ -20,6 +22,7 @@ public class Obstacle : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
+            fadeUI.SetActive(true);
         }
     }
 }

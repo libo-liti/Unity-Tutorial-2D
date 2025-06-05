@@ -3,9 +3,10 @@ using UnityEngine;
 
 public class DoorEvent2 : MonoBehaviour
 {
+    public GameObject doorLock;
     private Animator _animator;
-    public string openKey;
     public string closeKey;
+    
     private void Start()
     {
         _animator = GetComponent<Animator>();
@@ -13,14 +14,19 @@ public class DoorEvent2 : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Player"))
-            _animator.SetTrigger(openKey);
-            
+        if (other.CompareTag("Player"))
+        {
+            doorLock.SetActive(true);
+        }        
     }
 
     void OnTriggerExit(Collider other)
     {
-        if(other.CompareTag("Player"))
-            _animator.SetTrigger(closeKey);
+        if (other.CompareTag("Player"))
+        {
+            doorLock.SetActive(false);
+            if(_animator.GetCurrentAnimatorStateInfo(0).IsName("Door Side Open"))
+                _animator.SetTrigger(closeKey);
+        }        
     }
 }

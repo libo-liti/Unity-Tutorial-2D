@@ -7,7 +7,8 @@ public class CatController : MonoBehaviour
     
     private Rigidbody2D catRb;
     private Animator CatAnima;
-    
+
+    public float limitPower = 9f;
     public float jumpPower = 10f;
     public bool isGround = false;
     public int jumpCount = 0;
@@ -27,6 +28,9 @@ public class CatController : MonoBehaviour
             jumpCount++;
             
             soundManager.OnJumpSound();
+
+            if (catRb.linearVelocityY > limitPower)
+                catRb.linearVelocityY = limitPower;
         }
     }
 
