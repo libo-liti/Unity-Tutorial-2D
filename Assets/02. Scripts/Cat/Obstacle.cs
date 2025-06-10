@@ -13,7 +13,7 @@ public class Obstacle : MonoBehaviour
 
         if (transform.position.x <= -returnPosX)
         {
-            randomPosY = Random.Range(-8f, -3f);
+            randomPosY = Random.Range(-8, -4);
             transform.position = new Vector3(returnPosX, randomPosY, 0);
         }
     }
