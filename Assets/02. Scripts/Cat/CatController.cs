@@ -1,15 +1,12 @@
-using System;
+using System.Collections;
 using UnityEngine;
 using Cat;
-using UnityEditor;
 using UnityEngine.Video;
 
 public class CatController : MonoBehaviour
 {
-    public GameObject happyVideo;
-    public GameObject sadVideo;
-    
     public SoundManager soundManager;
+    public VideoManager videoManager;
 
     public GameObject gameOverUI;
     public GameObject fadeUI;
@@ -17,8 +14,8 @@ public class CatController : MonoBehaviour
     private Rigidbody2D catRb;
     private Animator CatAnima;
 
-    public float limitPower = 9f;
-    public float jumpPower = 10f;
+    public float limitPower;
+    public float jumpPower;
     public int jumpCount = 0;
     void Start()
     {
@@ -61,8 +58,8 @@ public class CatController : MonoBehaviour
                 fadeUI.GetComponent<FadePanel>().OnFade(3f, Color.white);
 
                 this.GetComponent<CircleCollider2D>().enabled = false;
-                
-                Invoke("HappyVideo", 5f);
+
+                StartCoroutine(EndingRoutine(true));
             }
         }
     }
@@ -77,8 +74,7 @@ public class CatController : MonoBehaviour
             fadeUI.GetComponent<FadePanel>().OnFade(3f, Color.black);
             
             this.GetComponent<CircleCollider2D>().enabled = false;
-            Invoke("SadVideo", 5f);
-
+            StartCoroutine(EndingRoutine(false));
         }        
         if (other.gameObject.CompareTag("Ground"))
         {
@@ -87,16 +83,26 @@ public class CatController : MonoBehaviour
         }
     }
 
+    IEnumerator EndingRoutine(bool isHappy)
+    {
+        yield return new WaitForSeconds(3.5f);
+        videoManager.VideoPlay(isHappy);
+        yield return new WaitUntil(() => videoManager.vPlayer.isPlaying);
+        
+        fadeUI.SetActive(false);
+        gameOverUI.SetActive(false);
+        soundManager.audioSource.mute = true;
+    }
     private void HappyVideo()
     {
-        happyVideo.SetActive(true);
+        videoManager.VideoPlay(true);
         fadeUI.SetActive(false);
         gameOverUI.SetActive(false);
         soundManager.audioSource.mute = true;
     }
     private void SadVideo()
     {
-        sadVideo.SetActive(true);
+        videoManager.VideoPlay(false);
         fadeUI.SetActive(false);
         gameOverUI.SetActive(false);
         soundManager.audioSource.mute = true;
