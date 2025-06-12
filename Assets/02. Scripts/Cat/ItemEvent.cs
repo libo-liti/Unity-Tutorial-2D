@@ -17,6 +17,17 @@ public class ItemEvent : MonoBehaviour
     
     public GameObject fadeUI;
 
+    private Vector3 initPos;
+    private void Awake()
+    {
+        initPos = transform.localPosition;
+    }
+
+    private void OnEnable()
+    {
+        transform.localPosition = initPos;
+    }
+
     private void Start()
     {
         SetRandomSetting(transform.position.x);

@@ -12,11 +12,13 @@ namespace Cat
         public GameObject playObj;
         public GameObject introUI;
         public GameObject playUI;
+        public GameObject videoPanel;
         
         public TMP_InputField inputfield;
         public TextMeshProUGUI nameTextUI;
 
         public Button startButton;
+        public Button reStartButton;
 
 
         private void Awake()
@@ -29,6 +31,7 @@ namespace Cat
         private void Start()
         {
             startButton.onClick.AddListener(OnStartButton);
+            reStartButton.onClick.AddListener(OnReStartButton);
         }
 
         public void OnStartButton()
@@ -49,6 +52,13 @@ namespace Cat
                 
                 nameTextUI.text = inputfield.text;
             }
+        }
+
+        public void OnReStartButton()
+        {
+            playObj.SetActive(true);
+            GameManager.ResetPlayUI();
+            videoPanel.SetActive(false);
         }
     }
 }
