@@ -2,15 +2,8 @@ using UnityEngine;
 
 public class Orc : Monster
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public override void SetHealth()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        hp = 30f;
     }
 }

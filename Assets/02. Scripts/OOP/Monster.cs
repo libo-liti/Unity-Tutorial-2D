@@ -1,16 +1,19 @@
+using System;
 using UnityEngine;
 
-public class Monster : MonoBehaviour
+public abstract class Monster : MonoBehaviour, IDamageble
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public float hp;
+    public abstract void SetHealth();
+    public void TakeDamage(float damage)
     {
-        
+        hp -= damage;
+        if(hp <= 0f)
+            Death();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Death()
     {
-        
+        Debug.Log("Death");
     }
 }
