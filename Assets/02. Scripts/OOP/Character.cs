@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class Character : MonoBehaviour
@@ -18,7 +17,7 @@ public class Character : MonoBehaviour
         if (other.GetComponent<IDropItem>() != null)
         {
             IDropItem item = other.GetComponent<IDropItem>();
-            item.Grab();
+            // item.Grab();
             currentItem = item;
         }
     }

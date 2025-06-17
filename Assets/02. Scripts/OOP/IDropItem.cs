@@ -3,6 +3,6 @@
 public interface IDropItem
 {
     void Use();
-    void Grab();
+    void Grab(Transform grabPos);
     void Drop();
 }
