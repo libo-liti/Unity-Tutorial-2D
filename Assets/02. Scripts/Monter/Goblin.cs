@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class Goblin : Monster
 {
-    public override void Init()
+    protected override void Init()
     {
-        hp = 3f;
+        hp = 5f;
         moveSpeed = 3f;
     }
 }

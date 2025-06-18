@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class Skeleton : Monster
 {
-    public override void Init()
+    protected override void Init()
     {
-        hp = 10f;
+        hp = 5f;
         moveSpeed = 1f;
     }
 }

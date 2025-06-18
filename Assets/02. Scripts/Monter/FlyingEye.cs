@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class FlyingEye : Monster
 {
-    public override void Init()
+    protected override void Init()
     {
-        hp = 2f;
+        hp = 5f;
         moveSpeed = 5f;
     }
 }
