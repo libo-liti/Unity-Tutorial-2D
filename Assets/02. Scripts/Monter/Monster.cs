@@ -60,7 +60,7 @@ public abstract class  Monster : MonoBehaviour
         }
     }
 
-    private IEnumerator Hit(float damage)
+    public IEnumerator Hit(float damage)
     {
         if (_isHit)
             yield break;

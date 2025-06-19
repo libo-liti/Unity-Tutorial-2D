@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3384087409843441161}
   - component: {fileID: 4580267550703861189}
   - component: {fileID: 8363997678960200798}
+  - component: {fileID: -5615596394254398818}
   m_Layer: 8
   m_Name: Yellow Potion
   m_TagString: Untagged
@@ -152,3 +153,16 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &-5615596394254398818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1533585290876435811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1dca882180c040708480d1c0d0734c62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  potionType: 0

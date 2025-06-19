@@ -1,8 +1,10 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
+    private List<Monster> monsterList = new List<Monster>();
     [SerializeField] private GameObject[] _monsters;
     [SerializeField] private GameObject[] _items;
 
@@ -15,8 +17,10 @@ public class SpawnManager : MonoBehaviour
             var randomX = Random.Range(-8, 9);
             var randomY = Random.Range(-3, 5);
 
-            var createPos = new Vector3(randomX, randomY, 0);
-            Instantiate(_monsters[randomIndex], createPos, Quaternion.identity);
+            var createPos = new Vector3(randomX, randomY, 0); 
+            GameObject monster = Instantiate(_monsters[randomIndex], createPos, Quaternion.identity);
+            
+            monsterList.Add(monster.GetComponent<Monster>());
         }
     }
 

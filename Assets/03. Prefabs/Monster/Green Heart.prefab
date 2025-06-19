@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2741475468789869453}
   - component: {fileID: 5006835886003633511}
   - component: {fileID: 8860613287283475078}
+  - component: {fileID: -5742909249585155899}
   m_Layer: 8
   m_Name: Green Heart
   m_TagString: Untagged
@@ -152,3 +153,16 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &-5742909249585155899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3583684154223663125}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23c60b58d64748348219ae420ce650e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  heartType: 0
