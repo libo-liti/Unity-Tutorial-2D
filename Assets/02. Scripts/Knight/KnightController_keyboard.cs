@@ -1,25 +1,30 @@
-using System;
 using UnityEngine;
 
 public class KnightController_keyboard : MonoBehaviour
 {
-    private Animator animator;
-    private Rigidbody2D knightRb;
-    
-    private Vector3 inputDir;
+    private Animator _animator;
+    private Rigidbody2D _knightRb;
+
+    private Vector3 _inputDir;
     [SerializeField] private float moveSpeed = 3f;
     [SerializeField] private float jumpPower = 13f;
 
-    private bool isGround;
+    private bool _isGround;
+    private bool _isCombo;
+    private bool _isAttack;
+    private float _atkDamage = 3f;
+
     private void Start()
     {
-        animator = GetComponent<Animator>();
-        knightRb = GetComponent<Rigidbody2D>();
+        _animator = GetComponent<Animator>();
+        _knightRb = GetComponent<Rigidbody2D>();
     }
 
     private void Update()
     {
         InputKeyBoard();
+        Jump();
+        Attack();
     }
 
     private void FixedUpdate()
@@ -27,51 +32,42 @@ public class KnightController_keyboard : MonoBehaviour
         Move();
     }
 
-    void InputKeyBoard()
+    private void InputKeyBoard()
     {
-        float h = Input.GetAxisRaw("Horizontal");
-        float v = Input.GetAxisRaw("Vertical");
+        var h = Input.GetAxisRaw("Horizontal");
+        var v = Input.GetAxisRaw("Vertical");
 
-        inputDir = new Vector3(h, v, 0);
+        _inputDir = new Vector3(h, v, 0).normalized;
 
-        Jump();
-        SetAnimation();
+        _animator.SetFloat("JoystickX", _inputDir.x);
+        _animator.SetFloat("JoystickY", _inputDir.y);
     }
 
-    void Move()
+    private void Move()
     {
-        if (inputDir.x != 0)
-            knightRb.linearVelocityX = inputDir.x * moveSpeed;
-    }
-
-    void Jump()
-    {
-        if (Input.GetKeyDown(KeyCode.Space) && isGround)
+        if (_inputDir.x != 0)
         {
-            animator.SetTrigger("Jump");
-            knightRb.AddForceY(jumpPower, ForceMode2D.Impulse);
-        }
-    }
-
-    void SetAnimation()
-    {
-        if (inputDir.x != 0)
-        {
-            var scaleX = inputDir.x > 0 ? 1f : -1f;
+            _knightRb.linearVelocityX = _inputDir.x * moveSpeed;
+            var scaleX = _inputDir.x > 0 ? 1f : -1f;
             transform.localScale = new Vector3(scaleX, 1, 1);
-            
-            animator.SetBool("isRun", true);
         }
-        else
-            animator.SetBool("isRun", false);
+    }
+
+    private void Jump()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) && _isGround)
+        {
+            _animator.SetTrigger("Jump");
+            _knightRb.AddForceY(jumpPower, ForceMode2D.Impulse);
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D other)
     {
         if (other.gameObject.CompareTag("Ground"))
         {
-            animator.SetBool("isGround", true);
-            isGround = true;
+            _animator.SetBool("isGround", true);
+            _isGround = true;
         }
     }
 
@@ -79,8 +75,45 @@ public class KnightController_keyboard : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Ground"))
         {
-            animator.SetBool("isGround", false);
-            isGround = false;
+            _animator.SetBool("isGround", false);
+            _isGround = false;
         }
+    }
+
+    private void Attack()
+    {
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            if (!_isAttack)
+            {
+                _isAttack = true;
+                _atkDamage = 3f;
+                _animator.SetTrigger("isAttack");
+            }
+            else
+            {
+                _isCombo = true;
+            }
+        }
+    }
+
+    public void CheckCombo()
+    {
+        if (_isCombo)
+        {
+            _animator.SetBool("isCombo", true);
+            _atkDamage = 5f;
+        }
+        else
+        {
+            _isAttack = false;
+            _animator.SetBool("isCombo", false);
+        }
+    }
+
+    public void EndAttackCombo()
+    {
+        _isAttack = false;
+        _isCombo = false;
     }
 }
