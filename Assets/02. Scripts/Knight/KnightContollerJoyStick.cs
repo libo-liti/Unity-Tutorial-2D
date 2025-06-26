@@ -13,7 +13,7 @@ public class KnightContollerJoyStick : MonoBehaviour
     [SerializeField] private float moveSpeed = 3f;
     [SerializeField] private float jumpPower = 13f;
 
-    private float _atkDamage = 3f;
+    // private float _atkDamage = 3f;
 
     private bool _isGround;
     private bool _isCombo;
@@ -44,18 +44,17 @@ public class KnightContollerJoyStick : MonoBehaviour
         _inputDir = new Vector3(x, y, 0).normalized;
         _animator.SetFloat("JoystickX", _inputDir.x);
         _animator.SetFloat("JoystickY", _inputDir.y);
-
-        if (_inputDir.x != 0)
-        {
-            var scaleX = _inputDir.x > 0 ? 1f : -1f;
-            transform.localScale = new Vector3(scaleX, 1, 1);
-        }
     }
 
     private void Move()
     {
         if (_inputDir.x != 0)
-            _knightRb.linearVelocityX = _inputDir.x * moveSpeed;
+        {
+            var scaleX = _inputDir.x > 0 ? 1f : -1f;
+            transform.localScale = new Vector3(scaleX, 1, 1);
+
+            _knightRb.linearVelocity = _inputDir * moveSpeed;
+        }
     }
 
     private void Jump()
@@ -95,7 +94,7 @@ public class KnightContollerJoyStick : MonoBehaviour
         if (!_isAttack)
         {
             _isAttack = true;
-            _atkDamage = 3f;
+            // _atkDamage = 3f;
             _animator.SetTrigger("Attack");
         }
         else
@@ -109,7 +108,7 @@ public class KnightContollerJoyStick : MonoBehaviour
         if (_isCombo)
         {
             _animator.SetBool("isCombo", true);
-            _atkDamage = 5f;
+            // _atkDamage = 5f;
         }
         else
         {

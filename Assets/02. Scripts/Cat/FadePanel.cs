@@ -11,7 +11,7 @@ public class FadePanel : MonoBehaviour
     {
         StartCoroutine(Fade(fadeTime, color, isFadeStart));
     }
-    IEnumerator Fade(float fadeTime, Color color, bool isFadeStart)
+    public IEnumerator Fade(float fadeTime, Color color, bool isFadeStart)
     {
         float percent = 0f;
         float timer = 0f;

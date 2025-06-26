@@ -12,7 +12,7 @@ public class KnightController_keyboard : MonoBehaviour
     private bool _isGround;
     private bool _isCombo;
     private bool _isAttack;
-    private float _atkDamage = 3f;
+    // private float _atkDamage = 3f;
 
     private void Start()
     {
@@ -87,7 +87,7 @@ public class KnightController_keyboard : MonoBehaviour
             if (!_isAttack)
             {
                 _isAttack = true;
-                _atkDamage = 3f;
+                // _atkDamage = 3f;
                 _animator.SetTrigger("isAttack");
             }
             else
@@ -102,7 +102,7 @@ public class KnightController_keyboard : MonoBehaviour
         if (_isCombo)
         {
             _animator.SetBool("isCombo", true);
-            _atkDamage = 5f;
+            // _atkDamage = 5f;
         }
         else
         {

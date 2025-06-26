@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: Floors_0
+  m_Name: Floors
   m_EditorClassIdentifier: 
   m_Sprite: {fileID: -1050580648, guid: c41bafb2d025a4e47aa011de4e8b68c9, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
