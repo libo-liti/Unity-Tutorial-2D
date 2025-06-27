@@ -5,12 +5,12 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Scenes/SampleScene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1
-    path: Assets/01. Scenes/Cat/Cat Animation.unity
-    guid: 66fecf06c12d6a245b3a153a1a19f3c3
+    path: Assets/01. Scenes/Platformer/Knight/1. Town.unity
+    guid: cad29db93af2dc6418813da0b18f5b89
+  - enabled: 1
+    path: Assets/01. Scenes/Platformer/Knight/2. Adventrue.unity
+    guid: 4fcef80fc1fab944493c57fc602f7513
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
