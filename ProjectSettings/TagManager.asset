@@ -14,6 +14,7 @@ TagManager:
   - Apple
   - Pipe
   - Monster
+  - Ladder
   layers:
   - Default
   - TransparentFX

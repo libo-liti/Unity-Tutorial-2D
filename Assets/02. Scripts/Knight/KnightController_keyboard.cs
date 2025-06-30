@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class KnightController_keyboard : MonoBehaviour
@@ -6,12 +7,16 @@ public class KnightController_keyboard : MonoBehaviour
     private Rigidbody2D _knightRb;
 
     private Vector3 _inputDir;
+    
     [SerializeField] private float moveSpeed = 3f;
     [SerializeField] private float jumpPower = 13f;
+    [SerializeField] private float dashPower = 5f;
 
     private bool _isGround;
     private bool _isCombo;
     private bool _isAttack;
+    private bool _isLadder;
+    private bool _isDash;
     // private float _atkDamage = 3f;
 
     private void Start()
@@ -25,6 +30,7 @@ public class KnightController_keyboard : MonoBehaviour
         InputKeyBoard();
         Jump();
         Attack();
+        Dash();
     }
 
     private void FixedUpdate()
@@ -41,15 +47,35 @@ public class KnightController_keyboard : MonoBehaviour
 
         _animator.SetFloat("JoystickX", _inputDir.x);
         _animator.SetFloat("JoystickY", _inputDir.y);
+
+        if (_inputDir.y < 0)
+        {
+            GetComponent<CapsuleCollider2D>().size = new Vector2(0.5f, 0.5f);
+        }
+        else
+        {
+            GetComponent<CapsuleCollider2D>().size = new Vector2(0.5f, 1f);
+        }
     }
 
     private void Move()
     {
+        if (_isDash)
+            return;
+        
         if (_inputDir.x != 0)
         {
             _knightRb.linearVelocityX = _inputDir.x * moveSpeed;
             var scaleX = _inputDir.x > 0 ? 1f : -1f;
             transform.localScale = new Vector3(scaleX, 1, 1);
+        }
+        else
+            _knightRb.linearVelocityX = 0f;
+
+
+        if (_isLadder && _inputDir.y != 0)
+        {
+            _knightRb.linearVelocityY = _inputDir.y + moveSpeed;
         }
     }
 
@@ -60,6 +86,22 @@ public class KnightController_keyboard : MonoBehaviour
             _animator.SetTrigger("Jump");
             _knightRb.AddForceY(jumpPower, ForceMode2D.Impulse);
         }
+    }
+
+    private void Dash()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftShift) && !_isDash)
+        {
+            _isDash = true;
+            float direction = transform.localScale.x;
+            _knightRb.AddForceX(dashPower * direction, ForceMode2D.Impulse);
+            Invoke("Dashing", 0.1f);
+        }
+    }
+
+    private void Dashing()
+    {
+        _isDash = false;
     }
 
     private void OnCollisionEnter2D(Collision2D other)
@@ -77,6 +119,30 @@ public class KnightController_keyboard : MonoBehaviour
         {
             _animator.SetBool("isGround", false);
             _isGround = false;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Monster"))
+        {
+            
+        }
+
+        if (other.CompareTag("Ladder"))
+        {
+            _isLadder = true;
+            _knightRb.gravityScale = 0f;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Ladder"))
+        {
+            _isLadder = false;
+            _knightRb.gravityScale = 3f;
+            _knightRb.linearVelocity = Vector2.zero;
         }
     }
 

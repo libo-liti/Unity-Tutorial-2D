@@ -21,7 +21,7 @@ public class Camerafollow : MonoBehaviour
 
         smoothPos.x = Mathf.Clamp(smoothPos.x, minBound.x, maxBound.x);
         smoothPos.y = Mathf.Clamp(smoothPos.y, minBound.y, maxBound.y);
-
+        smoothPos.z = -10f;
         transform.position = smoothPos;
     }
 }
