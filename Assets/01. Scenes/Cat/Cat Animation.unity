@@ -3123,8 +3123,8 @@ MonoBehaviour:
   videoManager: {fileID: 1780922238}
   gameOverUI: {fileID: 194825081}
   fadeUI: {fileID: 267223204}
-  limitPower: 19
-  jumpPower: 20
+  limitPower: 23
+  jumpPower: 24
   jumpCount: 0
 --- !u!1 &817992791
 GameObject:

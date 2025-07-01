@@ -15,6 +15,7 @@ TagManager:
   - Pipe
   - Monster
   - Ladder
+  - Return
   layers:
   - Default
   - TransparentFX
