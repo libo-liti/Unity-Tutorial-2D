@@ -6,18 +6,56 @@ public class Goblin : MonsterCore
     private float _timer;
     private float _idleTime, _patrolTime;
     private float _traceDist = 5f;
-    private float _attckDist = 2f;
+    private float _attckDist = 1.5f;
 
     private bool _isAttack;
     private void Start()
     {
-        Init(10f, 3f, 2f);
-        // StartCoroutine(FindPlayerRoutine());
+        Init(10f, 3f, 2f, 10f);
+        StartCoroutine(FindPlayerRoutine());
     }
 
-    protected override void Init(float hp, float speed, float attckTime)
+    protected override void Init(float hp, float speed, float attckTime, float atkDamage)
     {
-        base.Init(hp, speed, attckTime);
+        base.Init(hp, speed, attckTime, atkDamage);
+    }
+
+    private IEnumerator FindPlayerRoutine()
+    {
+        while (true)
+        {
+            yield return null;
+            targetDist = Vector3.Distance(transform.position, target.position);
+            
+            if (monsterState == MonsterState.Idle || monsterState == MonsterState.Patrol)
+            {
+                var monsterDir = Vector3.right * moveDir;
+                var playerDir = (target.position - transform.position).normalized;
+
+                isTrace = Vector3.Dot(monsterDir, playerDir) > 0;
+                if (targetDist <= _traceDist && isTrace)
+                {
+                    animator.SetBool("isRun", true);
+                    ChangeState(MonsterState.Trace);
+                }
+            }
+            else if (monsterState == MonsterState.Trace)
+            {
+                if (targetDist > _traceDist)
+                {
+                    _timer = 0f;
+                    _idleTime = Random.Range(1f, 5f);
+                    animator.SetBool("isRun", false);
+                    
+                    ChangeState(MonsterState.Idle);
+                }
+                
+                if (targetDist < _attckDist)
+                {
+                    ChangeState(MonsterState.Attack);
+                }
+            }
+        }
     }
 
     protected override void Idle()
@@ -29,17 +67,11 @@ public class Goblin : MonsterCore
             moveDir = Random.Range(0, 2) == 1 ? 1 : -1;
             transform.localScale = new Vector3(moveDir, 1, 1);
             animator.SetBool("isRun", true);
+            hpBar.transform.localScale = new Vector3(moveDir, 1, 1);
 
             _patrolTime = Random.Range(1f, 5f);
 
             ChangeState(MonsterState.Patrol);
-        }
-
-        if (targetDist <= _traceDist && isTrace)
-        {
-            _timer = 0;
-            animator.SetBool("isRun", true);
-            ChangeState(MonsterState.Trace);
         }
     }
 
@@ -56,12 +88,6 @@ public class Goblin : MonsterCore
             
             ChangeState(MonsterState.Idle);
         }
-
-        if (targetDist <= _traceDist && isTrace)
-        {
-            _timer = 0f;
-            ChangeState(MonsterState.Trace);
-        }
     }
 
     protected override void Trace()
@@ -71,17 +97,7 @@ public class Goblin : MonsterCore
 
         var scaleX = targetDir.x > 0 ? 1 : -1;
         transform.localScale = new Vector3(scaleX, 1, 1);
-        
-        if (targetDist > _traceDist)
-        {
-            animator.SetBool("isRun", false);
-            ChangeState(MonsterState.Idle);
-        }
-
-        if (targetDist < _attckDist)
-        {
-            ChangeState(MonsterState.Attack);
-        }
+        hpBar.transform.localScale = new Vector3(scaleX, 1, 1);
     }
 
     protected override void Attack()
@@ -94,11 +110,18 @@ public class Goblin : MonsterCore
     {
         _isAttack = true;
         animator.SetTrigger("isAttack");
-        yield return new WaitForSeconds(1f);
-
-        // yield return new WaitForSeconds(attckTime - 1f);
-        _isAttack = false;
-        ChangeState(MonsterState.Idle);
+        float currAnimationLen = animator.GetCurrentAnimatorStateInfo(0).length;
+        yield return new WaitForSeconds(currAnimationLen);
+        
         animator.SetBool("isRun", false);
+        var targetDir = (target.position - transform.position).normalized;
+        var scaleX = targetDir.x > 0 ? 1 : -1;
+        transform.localScale = new Vector3(scaleX, 1, 1);
+        hpBar.transform.localScale = new Vector3(scaleX, 1, 1);
+        yield return new WaitForSeconds(attckTime - 1f);
+        
+        _isAttack = false;
+        animator.SetBool("isRun", true);
+        ChangeState(MonsterState.Trace);
     }
 }

@@ -1,10 +1,13 @@
-using System;
 using UnityEngine;
+using UnityEngine.InputSystem.XR.Haptics;
+using UnityEngine.UI;
 
-public class KnightController_keyboard : MonoBehaviour
+public class KnightController_keyboard : MonoBehaviour, IDamageble
 {
     private Animator _animator;
     private Rigidbody2D _knightRb;
+    private Collider2D _knightCol;
+    [SerializeField] private Image hpBar;
 
     private Vector3 _inputDir;
     
@@ -17,12 +20,18 @@ public class KnightController_keyboard : MonoBehaviour
     private bool _isAttack;
     private bool _isLadder;
     private bool _isDash;
-    // private float _atkDamage = 3f;
+    private float _atkDamage = 4f;
+    private float _hp = 30f;
+    private float _curHp;
 
     private void Start()
     {
         _animator = GetComponent<Animator>();
         _knightRb = GetComponent<Rigidbody2D>();
+        _knightCol = GetComponent<Collider2D>();
+
+        _curHp = _hp;
+        hpBar.fillAmount = _curHp / _hp;
     }
 
     private void Update()
@@ -50,11 +59,14 @@ public class KnightController_keyboard : MonoBehaviour
 
         if (_inputDir.y < 0)
         {
-            GetComponent<CapsuleCollider2D>().size = new Vector2(0.5f, 0.5f);
+            GetComponent<CapsuleCollider2D>().size = new Vector2(0.5f, 1.2f);
+            GetComponent<CapsuleCollider2D>().offset = new Vector2(0, 0.6f);
+
         }
         else
         {
-            GetComponent<CapsuleCollider2D>().size = new Vector2(0.5f, 1f);
+            GetComponent<CapsuleCollider2D>().size = new Vector2(0.5f, 1.7f);
+            GetComponent<CapsuleCollider2D>().offset = new Vector2(0, 0.85f);
         }
     }
 
@@ -126,7 +138,11 @@ public class KnightController_keyboard : MonoBehaviour
     {
         if (other.CompareTag("Monster"))
         {
-            
+            if (other.GetComponent<IDamageble>() != null)
+            {
+                other.GetComponent<IDamageble>().TakeDamage(_atkDamage);
+                other.GetComponent<Animator>().SetTrigger("Hit");
+            }
         }
 
         if (other.CompareTag("Ladder"))
@@ -153,7 +169,7 @@ public class KnightController_keyboard : MonoBehaviour
             if (!_isAttack)
             {
                 _isAttack = true;
-                // _atkDamage = 3f;
+                _atkDamage = 3f;
                 _animator.SetTrigger("isAttack");
             }
             else
@@ -168,7 +184,7 @@ public class KnightController_keyboard : MonoBehaviour
         if (_isCombo)
         {
             _animator.SetBool("isCombo", true);
-            // _atkDamage = 5f;
+            _atkDamage = 5f;
         }
         else
         {
@@ -181,5 +197,22 @@ public class KnightController_keyboard : MonoBehaviour
     {
         _isAttack = false;
         _isCombo = false;
+    }
+
+    public void TakeDamage(float damage)
+    {
+        _curHp -= damage;
+        hpBar.fillAmount = _curHp / _hp;
+        if (_curHp <= 0f)
+        {
+            Death();
+        }
+    }
+
+    public void Death()
+    {
+        _animator.SetTrigger("Death");
+        _knightCol.enabled = false;
+        _knightRb.gravityScale = 0f;
     }
 }
