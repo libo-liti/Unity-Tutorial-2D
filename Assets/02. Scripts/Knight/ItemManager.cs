@@ -1,8 +1,28 @@
+using System;
 using UnityEngine;
+using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class ItemManager : MonoBehaviour
 {
+    public GameObject inventoryUI;
+    public Button inventoryButton;
+    
     [SerializeField] private GameObject[] items;
+    public Slot[] slots;
+    [SerializeField] private Transform slotGroup;
+
+    private void Start()
+    {
+        slots = slotGroup.GetComponentsInChildren<Slot>(true);
+        
+        inventoryButton.onClick.AddListener(OnInventory);
+    }
+
+    public void OnInventory()
+    {
+        inventoryUI.SetActive(!inventoryUI.activeSelf);
+    }
 
     public void DropItem(Vector3 dropPos)
     {
@@ -19,6 +39,13 @@ public class ItemManager : MonoBehaviour
 
     public void GetItem(IItemObject item)
     {
-        
+        foreach (var slot in slots)
+        {
+            if (slot.isEmpty)
+            {
+                slot.AddItem(item);
+                break;
+            }
+        }
     }
 }
